@@ -1,5 +1,5 @@
 /* Segnale: esempio completo della consegna su Home e Programma. */
-
+@import url("https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css");
 /* Valori condivisi: le regole interessate li richiamano con var(). */
 :root {
   --colore-primario: #234c78;
@@ -213,4 +213,94 @@ h3 {
   .event-grid {
     grid-template-columns: repeat(3, 1fr);
   }
+}
+.swiper {
+  width: 100%;
+  max-width: 54rem;
+  margin: 1.5rem 0 3rem;
+  border-radius: 0.75rem;
+  overflow: hidden;
+}
+
+.swiper-slide {
+  background: #ffffff;
+  border: 1px solid #b7c0b7;
+  border-radius: 0.75rem;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.swiper-slide img {
+  width: 100%;
+  height: auto;
+  display: block;
+  object-fit: cover;
+}
+
+.slide-caption {
+  padding: 1.25rem 1.5rem;
+}
+
+.slide-caption h3 {
+  margin: 0 0 0.5rem;
+  font-size: 1.25rem;
+}
+
+.slide-caption p {
+  margin: 0;
+  color: #46564b;
+  font-size: 0.95rem;
+}
+.venues-list {
+  padding-left: 1.25rem;
+  margin-bottom: 1.5rem;
+}
+
+.venues-list li {
+  margin-bottom: 0.75rem;
+}
+
+.map-container {
+  width: 100%;
+  max-width: 54rem;
+  border-radius: 0.75rem;
+  overflow: hidden;
+  border: 1px solid #b7c0b7;
+  margin-top: 1rem;
+}
+
+#mappa-sedi {
+  width: 100%;
+  height: 400px;
+  border: 0;
+  display: block;
+}
+
+.map-link {
+  margin-top: 0.75rem;
+  font-size: 0.95rem;
+}
+.swiper-button-next,
+.swiper-button-prev {
+  color: #ffffff;                  /* Colore bianco per la freccia */
+  font-size: 1.25rem;              /* Dimensione della freccia più piccola rispetto al default di 44px */
+  --swiper-navigation-size: 1.25rem;
+  width: 3.25rem;                  /* 1.25rem (dimensione freccia) + 2rem di diametro per il cerchio */
+  height: 3.25rem;                 /* 1.25rem + 2rem per mantenere la forma circolare perfetta */
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: transparent;
+  transition: background-color 0.2s ease;
+  top: 40%; /* Centra le frecce nell'area occupata dalla sola fotografia */
+  transform: translateY(-50%);
+  margin-top: 0;
+}
+
+/* Cerchio nero parzialmente trasparente al passaggio del mouse (hover) */
+.swiper-button-next:hover,
+.swiper-button-prev:hover {
+  background-color: rgba(0, 0, 0, 0.5); /* Nero con opacità al 50% */
 }
