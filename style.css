@@ -4,6 +4,8 @@
 :root {
   --colore-primario: #146466;
   --colore-primario-scuro: #5aaba9;
+  --colore-accento: #c92f1c;
+  --colore-accento-scuro: #f74d37;
   --colore-sfondo: #e2e2c4;
   --colore-testo: #202729;
   --font-testo: "Lato", Arial, Helvetica, sans-serif;
@@ -45,29 +47,36 @@ a:focus {
   position: sticky;
   top: 0;
   z-index: 1000;
-  background-color: var(--colore-sfondo);
+  background-color: var(--colore-primario-scuro); 
   padding: 1.25rem 0;
   border-bottom: 4px solid var(--colore-primario);
 }
 
 .brand {
   display: inline-block;
-  color: var(--colore-testo);
-  font-size: 1.75rem;
-  font-weight: bold;
-  line-height: 1.2;
+  font-family: var(--font-titoli);          
+  color: var(--colore-accento);             
+  font-size: 4rem;                       
+  font-weight: 700;                         
+  line-height: 1.1;
+  text-decoration: none;
+}
+
+.brand:hover {
   text-decoration: none;
 }
 
 .brand span {
   display: block;
-  margin-top: 0.25rem;
-  font-size: 0.875rem;
-  font-weight: normal;
+  margin-top: 0.35rem;
+  font-family: var(--font-titoli);         
+  color: var(--colore-sfondo);              
+  font-size: 1.5rem;                          
+  font-weight: 400;                         
 }
 
 nav {
-  margin-top: 1rem;
+  margin-top: 1.25rem;
 }
 
 .nav-list {
@@ -81,7 +90,17 @@ nav {
 
 .nav-list a {
   display: inline-block;
-  padding: 0.25rem 0;
+  background-color: var(--colore-accento);  
+  color: var(--colore-sfondo);              
+  font-weight: 700;
+  text-decoration: none;
+  padding: 0.45rem 0.95rem;
+  border-radius: 0.5rem;                  
+  transition: opacity 0.2s ease;
+}
+
+.nav-list a:hover {
+  background: var(--colore-accento-scuro);
 }
 
 
@@ -132,14 +151,14 @@ h3 {
   margin-top: 1rem;
   padding: 0.75rem 1.25rem;
   border-radius: 0.5rem;
-  background: var(--colore-primario);
+  background: var(--colore-accento);
   color: #ffffff;
   font-weight: bold;
   text-decoration: none;
 }
 
 .button-link:hover {
-  background: var(--colore-primario-scuro);
+  background: var(--colore-accento-scuro);
 }
 
 .content-section {
