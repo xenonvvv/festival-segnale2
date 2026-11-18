@@ -2,12 +2,12 @@
 @import url("https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css");
 /* Valori condivisi: le regole interessate li richiamano con var(). */
 :root {
-  --colore-primario: #234c78;
-  --colore-primario-scuro: #163454;
-  --colore-sfondo: #f5f2e9;
-  --colore-testo: #202923;
-  --font-testo: Arial, Helvetica, sans-serif;
-  --font-titoli: Georgia, "Times New Roman", serif;
+  --colore-primario: #146466;
+  --colore-primario-scuro: #5aaba9;
+  --colore-sfondo: #e2e2c4;
+  --colore-testo: #202729;
+  --font-testo: "Lato", Arial, Helvetica, sans-serif;
+  --font-titoli: "Comfortaa", sans-serif;
 }
 
 * {
@@ -42,6 +42,10 @@ a:focus {
 }
 
 .site-header {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  background-color: var(--colore-sfondo);
   padding: 1.25rem 0;
   border-bottom: 4px solid var(--colore-primario);
 }
@@ -66,9 +70,17 @@ nav {
   margin-top: 1rem;
 }
 
-nav a {
+.nav-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.nav-list a {
   display: inline-block;
-  margin-right: 1rem;
   padding: 0.25rem 0;
 }
 
@@ -192,6 +204,7 @@ h3 {
   position: absolute;
   top: -6rem;
   left: 1rem;
+  z-index: 1001;
   padding: 0.75rem 1rem;
   background: #ffffff;
   color: var(--colore-testo);
@@ -203,6 +216,12 @@ h3 {
 
 /* Da 600 px: due colonne. */
 @media (min-width: 600px) {
+  .nav-list {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+  }
+
   .event-grid {
     grid-template-columns: repeat(2, 1fr);
   }
