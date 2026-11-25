@@ -6,7 +6,7 @@
 * **Che cosa ho usato, modificato o scartato:** Ho seguito le indicazioni per completare i due file JSON e li ho salvati all'interno di una sottocartella dedicata chiamata `dati/` (`dati/sedi.json` e `dati/eventi.json`).
 * **Come ho verificato:** Controllo visivo della sintassi e della coerenza tra gli `id` delle sedi e i campi `sede_id` degli eventi.
 
----
+--- 
 
 ### 2. Redazione della scheda dati e diagramma ER in `SCHEMA.md`
 * **Che cosa ho chiesto:** Come impostare il file `SCHEMA.md` con entità, campi, chiavi primarie, relazione 1:N, quantità, modalità di aggiornamento, funzionamento della pagina e uno schema grafico in Mermaid.
