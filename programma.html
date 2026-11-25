@@ -5,8 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Programma — Segnale</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@400;700&family=Lato:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@400;700&family=Lato:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -34,65 +34,113 @@
 
     <section class="content-section">
       <h2 id="titolo-eventi">Gli appuntamenti</h2>
-      <div class="event-grid">
-        <article class="event-card">
-          <img src="assets/lettere-in-movimento.svg" alt="Lettere geometriche disposte su una griglia" width="900" height="600">
-          <div class="event-body">
-            <p class="event-meta">Venerdì 12 giugno · 10:00 · Incontro</p>
-            <h3>Lettere in movimento</h3>
-            <p>Come cambia un messaggio quando cambiano le lettere? Un incontro su tipografia, ritmo e comunicazione visiva.</p>
-            <p class="event-place"><strong>Sede:</strong> Officina Nord</p>
-          </div>
-        </article>
-        <article class="event-card">
-          <img src="assets/materia-seconda.svg" alt="Forme sovrapposte che richiamano campioni di materiali" width="900" height="600">
-          <div class="event-body">
-            <p class="event-meta">Venerdì 12 giugno · 14:00 · Laboratorio</p>
-            <h3>Materia seconda</h3>
-            <p>Un laboratorio per osservare materiali di recupero e immaginare nuovi utilizzi attraverso piccoli esperimenti.</p>
-            <p class="event-place"><strong>Sede:</strong> Spazio Forma</p>
-          </div>
-        </article>
-        <article class="event-card">
-          <img src="assets/citta-manifesto.svg" alt="Rettangoli colorati compongono una città astratta." width="900" height="600">
-          <div class="event-body">
-            <p class="event-meta">Venerdì 12 giugno · 17:00 · Mostra</p>
-            <h3>La città in un manifesto</h3>
-            <p>Una raccolta di manifesti immaginari racconta quartieri, incontri e abitudini della città attraverso forme e colori.</p>
-            <p class="event-place"><strong>Sede:</strong> Cortile Comune</p>
-          </div>
-        </article>
-        <article class="event-card">
-          <img src="assets/oggetti-dialogo.svg" alt="Due forme geometriche si fronteggiano sopra una linea comune." width="900" height="600">
-          <div class="event-body">
-            <p class="event-meta">Sabato 13 giugno · 10:00 · Incontro</p>
-            <h3>Oggetti in dialogo</h3>
-            <p>Designer e artigiani discutono come nascono gli oggetti quotidiani, tra funzione, cura dei dettagli e possibilità di riparazione.</p>
-            <p class="event-place"><strong>Sede:</strong> Officina Nord</p>
-          </div>
-        </article>
-        <article class="event-card">
-          <img src="assets/mappe-abitare.svg" alt="Un percorso collega tre punti su una mappa geometrica." width="900" height="600">
-          <div class="event-body">
-            <p class="event-meta">Sabato 13 giugno · 14:00 · Laboratorio</p>
-            <h3>Mappe da abitare</h3>
-            <p>Disegniamo una mappa fatta di percorsi, punti di incontro e luoghi da riscoprire, partendo dall'esperienza di chi li attraversa.</p>
-            <p class="event-place"><strong>Sede:</strong> Spazio Forma</p>
-          </div>
-        </article>
-        <article class="event-card">
-          <img src="assets/progettare-insieme.svg" alt="Moduli di colori diversi si incastrano in una composizione comune." width="900" height="600">
-          <div class="event-body">
-            <p class="event-meta">Sabato 13 giugno · 17:00 · Mostra</p>
-            <h3>Progettare insieme</h3>
-            <p>Una selezione di progetti collettivi mostra come idee diverse possano diventare un risultato condiviso.</p>
-            <p class="event-place"><strong>Sede:</strong> Cortile Comune</p>
-          </div>
-        </article>
-      </div>
+      <!-- Area di stato per caricamento, lista vuota o errori -->
+      <p id="stato-programma" class="reading-text" aria-live="polite">Caricamento del programma in corso...</p>
+      <!-- Contenitore che verrà popolato dinamicamente via JavaScript -->
+      <div id="griglia-eventi" class="event-grid"></div>
     </section>
   </main>
 
-  <footer class="site-footer"><div class="container"><p>Segnale · Progetto didattico · Festival immaginario</p></div></footer>
+  <footer class="site-footer">
+    <div class="container">
+      <p>Segnale · Progetto didattico · Festival immaginario</p>
+    </div>
+  </footer>
+
+  <script>
+    // Formatta la data ISO (es. "2026-06-12") in testo leggibile (es. "Venerdì 12 giugno")
+    function formattaData(dataIso) {
+      const dataObj = new Date(dataIso + 'T00:00:00');
+      const opzioni = { weekday: 'long', day: 'numeric', month: 'long' };
+      const stringaData = dataObj.toLocaleDateString('it-IT', opzioni);
+      return stringaData.charAt(0).toUpperCase() + stringaData.slice(1);
+    }
+
+    async function caricaProgramma() {
+      const statoEl = document.getElementById('stato-programma');
+      const grigliaEl = document.getElementById('griglia-eventi');
+
+      try {
+        // Carica entrambi i file JSON in parallelo
+        const [rispostaEventi, rispostaSedi] = await Promise.all([
+          fetch('eventi.json'),
+          fetch('sedi.json')
+        ]);
+
+        // Verifica che entrambi i file siano stati letti correttamente
+        if (!rispostaEventi.ok || !rispostaSedi.ok) {
+          throw new Error('Errore nel caricamento dei file dati.');
+        }
+
+        const eventi = await rispostaEventi.json();
+        const sedi = await rispostaSedi.json();
+
+        // Gestione lista eventi vuota
+        if (!Array.isArray(eventi) || eventi.length === 0) {
+          statoEl.textContent = 'Al momento non ci sono eventi in programma.';
+          return;
+        }
+
+        // Crea una mappa rapida id -> nome sede per la ricerca
+        const mappaSedi = new Map();
+        sedi.forEach(sede => {
+          mappaSedi.set(sede.id, sede.nome);
+        });
+
+        // Svuota il messaggio di stato ora che i dati sono pronti
+        statoEl.textContent = '';
+
+        // Costruisce le schede evento conservando classi e struttura CSS
+        eventi.forEach(evento => {
+          const articolo = document.createElement('article');
+          articolo.className = 'event-card';
+
+          const img = document.createElement('img');
+          img.src = evento.immagine;
+          img.alt = evento.immagine_alt || '';
+          img.width = 900;
+          img.height = 600;
+
+          const body = document.createElement('div');
+          body.className = 'event-body';
+
+          const meta = document.createElement('p');
+          meta.className = 'event-meta';
+          const dataFormattata = formattaData(evento.data);
+          meta.textContent = `${dataFormattata} · ${evento.orario} · ${evento.categoria}`;
+
+          const titolo = document.createElement('h3');
+          titolo.textContent = evento.titolo;
+
+          const descrizione = document.createElement('p');
+          descrizione.textContent = evento.descrizione;
+
+          const luogo = document.createElement('p');
+          luogo.className = 'event-place';
+          const nomeSede = mappaSedi.get(evento.sede_id) || 'Sede da definire';
+
+          const etichettaSede = document.createElement('strong');
+          etichettaSede.textContent = 'Sede: ';
+          luogo.appendChild(etichettaSede);
+          luogo.appendChild(document.createTextNode(nomeSede));
+
+          body.appendChild(meta);
+          body.appendChild(titolo);
+          body.appendChild(descrizione);
+          body.appendChild(luogo);
+
+          articolo.appendChild(img);
+          articolo.appendChild(body);
+          grigliaEl.appendChild(articolo);
+        });
+
+      } catch (errore) {
+        statoEl.textContent = 'Impossibile caricare il programma. Riprova più tardi.';
+        console.error(errore);
+      }
+    }
+
+    caricaProgramma();
+  </script>
 </body>
 </html>

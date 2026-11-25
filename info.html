@@ -96,6 +96,24 @@
        <a href="https://umap.openstreetmap.fr/it/map/segnale-sedi-del-festival-immaginario_1479665?scaleControl=false&amp;miniMapControl=false&amp;scrollWheelZoom=true&amp;zoomControl=true&amp;editMode=disabled&amp;moreControl=true&amp;searchControl=null&amp;tilelayersControl=null&amp;embedControl=null&amp;datalayersControl=true&amp;onLoadPanel=none&amp;captionBar=false&amp;captionMenus=true#12/45.0465/7.6528">Visualizza la mappa a schermo intero</a>
       </p>
     </section>
+    <!-- SEZIONE METEO A TORINO ADESSO -->
+    <section class="content-section" id="sezione-meteo">
+      <h2 id="titolo-meteo">Meteo a Torino adesso</h2>
+      <p class="reading-text">Questi dati mostrano le condizioni meteorologiche rilevati oggi in città, non rappresentano le previsioni per le date future del festival (12–13 giugno).</p>
+
+      <div id="meteo-contenuto" class="event-card" style="max-width: 54rem; padding: 1.5rem; margin-top: 1rem;" aria-live="polite">
+        <p id="meteo-stato" style="margin: 0;">Caricamento dati meteo in corso...</p>
+        <div id="meteo-dati" hidden>
+          <p style="margin: 0 0 0.5rem;"><strong>Temperatura:</strong> <span id="meteo-temp"></span></p>
+          <p style="margin: 0 0 0.5rem;"><strong>Vento:</strong> <span id="meteo-vento"></span></p>
+          <p class="event-meta" style="margin: 0;"><strong>Ora dell'ultimo rilevamento:</strong> <span id="meteo-ora"></span></p>
+        </div>
+      </div>
+
+      <p class="map-link">
+        Dati meteo: <a href="https://open-meteo.com/" target="_blank" rel="noopener noreferrer">Open-Meteo</a>, licenza <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener noreferrer">CC BY 4.0</a>.
+      </p>
+    </section>
   </main>
 
   <footer class="site-footer">
@@ -117,6 +135,50 @@
         prevEl: '.swiper-button-prev',
       },
     });
+  </script>
+  <!-- Script Meteo Open-Meteo -->
+  <script>
+    async function caricaMeteoTorino() {
+      const urlMeteo = 'https://api.open-meteo.com/v1/forecast?latitude=45.0703&longitude=7.6869&current=temperature_2m,wind_speed_10m&timezone=Europe%2FRome';
+      const statoEl = document.getElementById('meteo-stato');
+      const datiEl = document.getElementById('meteo-dati');
+      const tempEl = document.getElementById('meteo-temp');
+      const ventoEl = document.getElementById('meteo-vento');
+      const oraEl = document.getElementById('meteo-ora');
+
+      try {
+        const risposta = await fetch(urlMeteo);
+        if (!risposta.ok) {
+          throw new Error('Risposta di rete non valida');
+        }
+
+        const dati = await risposta.json();
+        const corrente = dati.current;
+        const unita = dati.current_units;
+
+        // Formatta data e ora ISO ricevute dall'API (es. "2026-11-25T10:15")
+        const dataOra = new Date(corrente.time);
+        const oraFormattata = dataOra.toLocaleString('it-IT', {
+          day: '2-digit',
+          month: '2-digit',
+          year: 'numeric',
+          hour: '2-digit',
+          minute: '2-digit'
+        });
+
+        tempEl.textContent = `${corrente.temperature_2m} ${unita.temperature_2m}`;
+        ventoEl.textContent = `${corrente.wind_speed_10m} ${unita.wind_speed_10m}`;
+        oraEl.textContent = oraFormattata;
+
+        statoEl.hidden = true;
+        datiEl.hidden = false;
+      } catch (errore) {
+        statoEl.textContent = 'Al momento non è possibile recuperare i dati meteo aggiornati per Torino.';
+        console.error('Errore nel caricamento meteo:', errore);
+      }
+    }
+
+    caricaMeteoTorino();
   </script>
 </body>
 </html>

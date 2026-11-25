@@ -1,58 +1,70 @@
-# Segnale — Moodboard, carattere web, menu responsive e intestazione sticky
+# Segnale — Programma dai dati
 
-Continua a sviluppare il tuo sito Segnale partendo dalla versione con Home, Programma e Info e luoghi. Mantieni contenuti e funzioni delle consegne precedenti e aggiorna la stessa repository e GitHub Pages.
+Trasforma il Programma del tuo sito Segnale: le schede devono essere generate da due file JSON, con eventi e sedi collegati. In Info e luoghi aggiungi un piccolo riquadro **Meteo a Torino adesso**, con dati letti da un’API pubblica.
 
-## 1. Moodboard
+## Da dove partire
 
-Prepara un PDF con **3–4 elementi di riferimento** per l’identità visiva del festival. Non devono essere necessariamente immagini: puoi includere una palette di colori, un campione tipografico, parole chiave sull’atmosfera, un manifesto, una fotografia o un esempio di impaginazione.
+**Se hai svolto la consegna precedente, continua dal tuo sito**, conservando le tue personalizzazioni, e copia da questo pacchetto la cartella `dati/`. Altrimenti usa il sito in questo ZIP come base di recupero: il PDF `progettazione/moodboard.pdf` è un esempio docente, non una moodboard tua.
 
-- Per ogni elemento scrivi **una riga di commento**: quale aspetto ti interessa e che cosa suggerisce per il tuo sito.
-- Indica **tre scelte visive riconoscibili nel sito**, per esempio colori, caratteri e spaziature, collegandole ai riferimenti raccolti. Puoi mantenere scelte già fatte se le motivi.
-- Indica il nome del carattere web scelto e il servizio da cui proviene.
-- Salva il documento nella repository come `progettazione/moodboard.pdf`.
+**Correzione della richiesta precedente:** l’obbligo di cambiare la disposizione del menu fra telefono e desktop è stato tolto: era un errore, perché rendeva la visualizzazione peggiore.
 
-Riferimento: **lezione 5, slide 47–48**.
+## 1. Completa i due JSON
 
-## 2. Carattere web
+I file in `dati/` contengono **una sede e due eventi**. Completali con le altre due sedi e i quattro eventi, presi dal tuo Programma e da Info e luoghi, seguendo i record già presenti. Non è necessario che gli ID siano consecutivi, come mostrano gli eventi forniti con id 1 e 4. Nome e indirizzo della sede stanno solo in `sedi.json`: ogni evento li richiama con `sede_id`.
 
-Integra **almeno un carattere web** coerente con la moodboard, per i titoli oppure per il testo. Puoi usare, per esempio, Google Fonts.
+## 2. Descrivi i dati
 
-- Copia dal servizio il collegamento necessario a caricare il carattere e inseriscilo nell’head delle tre pagine in cui viene utilizzato.
-- Applica il carattere dal CSS condiviso, aggiornando `--font-titoli` o `--font-testo` già presenti nel sito.
-- Mantieni una famiglia di riserva appropriata nella dichiarazione, per esempio `serif` oppure `sans-serif`.
-- Usa la scelta in modo coerente nelle tre pagine e controlla che il testo rimanga leggibile.
+Crea `dati/SCHEMA.md` con una breve scheda dati:
 
-Riferimenti: **lezione 4, slide 24–25**; [Google Fonts](https://fonts.google.com/) e [guida ufficiale: collegamento HTML e uso nel CSS](https://developers.google.com/fonts/docs/getting_started).
+1. Entità: Evento e Sede.
+2. Campi di ciascuna entità, con tipo ed esempio: sono quelli dei due JSON che hai completato.
+3. Chiave primaria di ciascuna entità: `id` numerico, univoco nell’entità e stabile.
+4. Relazione: una sede può ospitare più eventi; ogni evento si svolge in una sede. `Evento.sede_id` fa riferimento a `Sede.id`.
+5. Quantità: sei eventi e tre sedi.
+6. Chi aggiorna i dati e come: modifica dei file nella repository e pubblicazione.
+7. Che cosa mostra la pagina.
 
-Il collegamento HTML carica il carattere; il CSS stabilisce dove usarlo. Scrivere soltanto il nome nel CSS non scarica un carattere che non è presente sul computer del visitatore.
+Nello stesso file, sotto la scheda, aggiungi lo schema Evento–Sede in Mermaid oppure un disegno leggibile.
 
-## 3. Menu responsive
+## 3. Genera il Programma
 
-Nelle tre pagine, fai cambiare la disposizione dei collegamenti Home, Programma e Info e luoghi:
+Fai in modo che `programma.html` carichi i due JSON con `fetch` e costruisca le schede: nell’HTML non devono restare le sei schede scritte a mano. Le schede mostrano le stesse informazioni di prima, con il nome della sede preso da `sedi.json`, e conservano lo stile del tuo sito.
 
-- **Sotto 600 px:** collegamenti disposti uno sotto l’altro, in colonna.
-- **Da 600 px in su:** collegamenti disposti in riga.
+La pagina deve anche mostrare un messaggio mentre carica, quando non ci sono eventi e quando un file non si legge. Un evento con un `sede_id` sbagliato compare comunque, con un testo come «Sede da definire».
 
-Mantieni tutti i collegamenti visibili, funzionanti e leggibili, senza sovrapposizioni o scorrimento orizzontale. Adatta spazi e allineamento allo stile del tuo sito.
+## 4. Meteo a Torino adesso
 
-Il risultato richiesto si ottiene con HTML e CSS.
+Un’**API** è un indirizzo che risponde con dati in JSON: si legge con `fetch` come i tuoi file, ma i dati arrivano da un altro sito e cambiano nel tempo. Open-Meteo, citata nella lezione 7, non richiede account né chiave. Apri questo indirizzo nel browser per vedere la risposta:
 
-## 4. Intestazione sticky
+```text
+https://api.open-meteo.com/v1/forecast?latitude=45.0703&longitude=7.6869&current=temperature_2m,wind_speed_10m&timezone=Europe%2FRome
+```
 
-Nelle tre pagine, rendi l’intestazione con il menu **sticky**: durante lo scorrimento deve fermarsi in alto e rimanere disponibile.
+In `info.html` aggiungi una sezione **Meteo a Torino adesso**, nello stile del tuo sito, che:
 
-- Usa `position: sticky` con `top: 0`, adattando lo stile della tua intestazione.
-- Mantieni uno sfondo che renda leggibili nome del festival e collegamenti anche mentre scorrono gli altri contenuti.
-- Controlla che il menu sia utilizzabile e che galleria e mappa non coprano l’intestazione durante lo scorrimento.
-- Sul telefono verifica che l’intestazione con il menu in colonna lasci spazio sufficiente per leggere il contenuto.
+- mostri temperatura, vento e ora del dato;
+- citi la fonte con un collegamento, per esempio «Dati meteo: Open-Meteo, licenza CC BY 4.0»;
+- chiarisca che è il meteo di oggi, non la previsione per le date del festival;
+- se la richiesta non riesce, mostri un messaggio senza bloccare il resto della pagina.
 
-## 5. Verifica e pubblicazione
+## 5. Verifica
 
-- Controlla Home, Programma e Info e luoghi a **375, 768 e 1280 px**.
-- Verifica che il menu cambi disposizione e che i collegamenti funzionino.
-- Scorri le tre pagine e controlla che l’intestazione sticky rimanga leggibile e utilizzabile.
-- Controlla che il carattere web venga caricato anche sul sito pubblico. Se hai dubbi, verifica le richieste nel pannello Network, mostrato nella **lezione 4, slide 39**.
-- Verifica che galleria, mappa, immagini e contenuti precedenti continuino a funzionare.
-- Inserisci `progettazione/moodboard.pdf` nella stessa repository e pubblica le modifiche con il percorso già utilizzato.
+Apri il sito con Live Preview, non con il doppio clic. Fai queste prove una alla volta, ripristinando ogni volta i file:
 
-Puoi lavorare direttamente sul codice o usare un chatbot. Parti dai riferimenti nelle slide, fornisci i file aggiornati quando servono e verifica le modifiche nel browser e sul sito pubblico.
+- Cambia il nome di una sede in `sedi.json`: cambia nelle schede dei suoi eventi.
+- Metti `[]` in `eventi.json`: compare il messaggio di nessun evento.
+- Rinomina `sedi.json`: compare il messaggio d’errore.
+- Metti un `sede_id` inesistente: l’evento compare con «Sede da definire».
+- Nell’indirizzo del meteo scrivi `temperatura_2m` al posto di `temperature_2m`: compare il messaggio d’errore del meteo, mentre galleria e mappa funzionano.
+
+Controlla anche, a larghezza di telefono e di computer, che il resto del sito funzioni come prima.
+
+## 6. AI e pubblicazione
+
+Puoi usare un chatbot o lavorare sul codice. Fornisci schema e file aggiornati, chiedi una modifica alla volta e verifica il risultato. Non servono abbonamenti AI, Node.js, npm o un database.
+
+Tieni un resoconto del lavoro con l’AI in `progettazione/resoconto-ai.md`: alla fine di ogni sessione aggiungi una sezione `## Sessione N` con un riassunto in pochi punti di come hai usato l’AI: che cosa hai chiesto, che cosa hai usato, modificato o scartato, come hai verificato, quali problemi hai avuto e come li hai risolti. Puoi farlo scrivere allo stesso chatbot con cui hai lavorato, poi rileggilo e correggilo. Non servono le conversazioni complete.
+
+Aggiorna la stessa repository e le stesse GitHub Pages, con la moodboard e le pagine già realizzate. Prima di terminare controlla che i dati siano quelli corretti e verifica la versione pubblica.
+
+La scadenza e la modalità di raccolta saranno comunicate dal docente.
