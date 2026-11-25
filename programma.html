@@ -46,10 +46,8 @@
       <p>Segnale · Progetto didattico · Festival immaginario</p>
     </div>
   </footer>
-
   <script>
-    // Formatta la data ISO (es. "2026-06-12") in testo leggibile (es. "Venerdì 12 giugno")
-    function formattaData(dataIso) {
+     function formattaData(dataIso) {
       const dataObj = new Date(dataIso + 'T00:00:00');
       const opzioni = { weekday: 'long', day: 'numeric', month: 'long' };
       const stringaData = dataObj.toLocaleDateString('it-IT', opzioni);
@@ -63,8 +61,8 @@
       try {
         // Carica entrambi i file JSON in parallelo
         const [rispostaEventi, rispostaSedi] = await Promise.all([
-          fetch('eventi.json'),
-          fetch('sedi.json')
+          fetch('dati/eventi.json'),
+          fetch('dati/sedi.json')
         ]);
 
         // Verifica che entrambi i file siano stati letti correttamente
